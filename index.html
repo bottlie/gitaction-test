@@ -1,130 +1,481 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quick Menu</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #7C2025;
-      color: white;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>즐겨찾기 - 가위바위보</title>
+    <style>
+        :root {
+            --bg-color: #76161b;
+            --text-color: white;
+            --box-bg-color: #B22222;
+            --box-hover-bg-color: #7A0000;
+        }
 
-    .quick-menu {
-      text-align: center;
-      padding: 20px;
-    }
+        [data-theme="dark"] {
+            --bg-color: #1e1e1e;
+            --text-color: #f0f0f0;
+            --box-bg-color: #333;
+            --box-hover-bg-color: #444;
+        }
 
-    h1 {
-      margin-bottom: 20px;
-    }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            position: relative;
+            transition: background-color 0.5s, color 0.5s;
+            background-image: url(https://github.com/bottlie/testWeb/blob/main/3.png?raw=true);
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            background-size: contain;
+        }
+        .digital-clock {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            color: black;
+            font-family: 'Courier New', Courier, monospace;
+            z-index: 1000;
+        }
 
-    .menu-categories {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
+        .calendar {
+            display: none;
+            position: absolute;
+            top: 100px;
+            right: 20px;
+            width: 300px;
+            background: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
 
-    .category {
-      padding: 10px 15px;
-      border: 1px solid white;
-      margin: 0 5px;
-      cursor: pointer;
-    }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
 
-    .category.inactive {
-      opacity: 0.5;
-    }
+        .calendar-header button {
+            background-color: var(--box-bg-color);
+            color: var(--text-color);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin: 20px auto;
-      max-width: 400px;
-    }
+        .calendar-header button:hover {
+            background-color: var(--box-hover-bg-color);
+        }
 
-    .menu-grid a {
-      text-decoration: none;
-    }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
 
-    .menu-grid button {
-      width: 180px; /* 고정된 너비 */
-      height: 60px; /* 고정된 높이 */
-      padding: 10px;
-      background-color: white;
-      color: #7C2025;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: transform 0.2s, background-color 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .calendar-grid div {
+            padding: 10px;
+            border-radius: 5px;
+        }
 
-    .menu-grid button:hover {
-      background-color: #FFD1D1;
-      transform: scale(1.05);
-    }
+        .calendar-grid .current-day {
+            background-color: #76161b !important;
+            color: white;
+        }
 
-    .expand-button {
-      margin-top: 20px;
-      background-color: transparent;
-      color: white;
-      font-size: 16px;
-      border: 1px solid white;
-      cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
-    }
+        .calendar-grid .day {
+            background-color: black;
+        }
 
-    .expand-button:hover {
-      background-color: white;
-      color: #7C2025;
-    }
-  </style>
+        .message {
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .game-container, .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 80%;
+            max-width: 900px;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .box, .choice, .add-button {
+            background-color: var(--box-bg-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 30px;
+            border-radius: 5px;
+            font-size: 17px;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s, color 0.3s;
+            text-decoration: none;
+        }
+
+        .box:hover, .choice:hover, .add-button:hover {
+            background-color: var(--box-hover-bg-color);
+            transform: scale(1.1);
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .toggle-btn, .calendar-btn {
+            background-color: var(--box-bg-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .toggle-btn:hove, .calendar-btn:hove {
+            background-color: var(--box-hover-bg-color);
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: var(--text-color);
+            font-size: 12px;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0.5;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            color: black;
+        }
+
+        .modal input {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .modal button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .modal .add-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .modal .cancel-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .modal button:hover {
+            opacity: 0.9;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+       
+    </style>
 </head>
 <body>
-  <div class="quick-menu">
-    <h1>Quick menu</h1>
-    <div class="menu-categories">
-      <div class="category">자주 찾는 메뉴</div>
-      <div class="category inactive">예비 교통대인</div>
-      <div class="category inactive">교통대인</div>
-      <div class="category inactive">교직원</div>
+    <div class="digital-clock" id="current-time">00:00:00</div>
+
+    <div class="controls">
+        <button class="toggle-btn">☀️</button>
+        <button class="calendar-btn">📅</button>
     </div>
-    <div class="menu-grid">
-      <a href="https://example.com/system"><button>통합정보시스템</button></a>
-      <a href="https://example.com/library"><button>도서관</button></a>
-      <a href="https://example.com/management"><button>학생역량통합관리시스템</button></a>
-      <a href="https://example.com/education"><button>대학교육혁신원</button></a>
-      <a href="https://example.com/global"><button>글로벌대학30</button></a>
-      <a href="https://example.com/portal"><button>포털시스템</button></a>
-      <a href="https://example.com/lifelong"><button>평생교육원</button></a>
-      <a href="https://example.com/fund"><button>발전기금</button></a>
-      <a href="https://example.com/international"><button>국제교류본부</button></a>
-      <a href="https://example.com/idf"><button>IDF</button></a>
-      <a href="https://example.com/project"><button>국립대학육성사업</button></a>
-      <a href="https://example.com/admission"><button>입학정보</button></a>
-      <a href="https://example.com/dormitory"><button>생활관</button></a>
-      <a href="https://example.com/certificate"><button>증명서발급</button></a>
-      <a href="https://example.com/department"><button>학부안내</button></a>
-      <a href="https://example.com/smartcampus"><button>스마트캠퍼스</button></a>
-      <a href="https://example.com/studentcard"><button>모바일 학생증</button></a>
-      <a href="https://example.com/counseling"><button>학생상담센터</button></a>
-      <a href="https://example.com/internship"><button>현장실습지원센터/IPP사업단</button></a>
-      <a href="https://example.com/ambassador"><button>KNUT 홍보대사</button></a>
+    
+    <p class="message">가위바위보를 시작하세요!</p>
+    <div class="game-container">
+        <div class="choice" data-choice="rock">✊ 바위</div>
+        <div class="choice" data-choice="paper">✋ 보</div>
+        <div class="choice" data-choice="scissors">✌ 가위</div>
     </div>
-    <button class="expand-button">전체 펼쳐보기 ↓</button>
-  </div>
-  <script>
-    document.querySelector('.expand-button').addEventListener('click', () => {
-      alert('전체 메뉴를 불러옵니다!');
-    });
-  </script>
+
+    <div class="container" style="display: none;">
+        <a href="https://tis.ut.ac.kr/" class="box" target="_blank">통합정보시스템</a>
+        <a href="https://ecampus.ut.ac.kr/" class="box" target="_blank">이러닝</a>
+        <a href="https://portal.ut.ac.kr/" class="box" target="_blank">포털시스템</a>
+        <a href="https://www.ut.ac.kr/prog/mealManage/MT01/kor/sub06_02_02_01/list.do" class="box" target="_blank">학교식단</a>
+        <a href="https://www.ut.ac.kr/prog/schedule/kor/sub05_01/1/scheduleList.do" class="box" target="_blank">학사일정</a>
+        <div class="add-button">+</div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="modal" id="modal">
+        <h3>새로운 즐겨찾기 추가</h3>
+        <input type="text" id="nameInput" placeholder="이름을 입력하세요">
+        <input type="text" id="urlInput" placeholder="URL을 입력하세요">
+        <button class="add-btn" id="addBtn">추가</button>
+        <button class="cancel-btn" id="cancelBtn">취소</button>
+    </div>
+
+    <div class="calendar">
+        <div class="calendar-header">
+            <button id="prev-month">이전</button>
+            <h2 id="month-year">2024년 11월</h2>
+            <button id="next-month">다음</button>
+        </div>
+        <div class="calendar-grid" id="calendar-grid">
+            <!-- 여기에 날짜가 채워집니다 -->
+        </div>
+    </div>
+
+    <script>
+        const timeElement = document.getElementById("time");
+        const addButton = document.querySelector(".add-button");
+        const modal = document.getElementById("modal");
+        const overlay = document.getElementById("overlay");
+        const addBtn = document.getElementById("addBtn");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const nameInput = document.getElementById("nameInput");
+        const urlInput = document.getElementById("urlInput");
+        const container = document.querySelector(".container");
+
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateTime, 1000);
+
+        const monthYear = document.getElementById('month-year');
+        const calendarGrid = document.getElementById('calendar-grid');
+        let currentMonth = new Date();
+
+        function renderCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            monthYear.textContent = `${year}년 ${month + 1}월`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            calendarGrid.innerHTML = '';
+
+            // 빈 칸 채우기
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                calendarGrid.appendChild(emptyCell);
+            }
+
+            // 날짜 채우기
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.textContent = day;
+                dayCell.classList.add('day');
+
+                // 오늘 날짜 강조
+                if (
+                    year === today.getFullYear() &&
+                    month === today.getMonth() &&
+                    day === today.getDate()
+                ) {
+                    dayCell.classList.add('current-day');
+                }
+
+                calendarGrid.appendChild(dayCell);
+            }
+        }
+
+        // 이전, 다음 버튼 클릭 이벤트
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentMonth.setMonth(currentMonth.getMonth() - 1);
+            renderCalendar(currentMonth);
+        });
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentMonth.setMonth(currentMonth.getMonth() + 1);
+            renderCalendar(currentMonth);
+        });
+
+        // 캘린더 초기 렌더링
+        renderCalendar(currentMonth);
+
+        const calendar = document.querySelector('.calendar'); // 캘린더 요소 선택
+const calendarBtn = document.querySelector('.calendar-btn'); // 캘린더 버튼 선택
+
+calendarBtn.addEventListener('click', () => {
+    // 캘린더 보이기/숨기기
+    if (calendar.style.display === 'none' || calendar.style.display === '') {
+        calendar.style.display = 'block';
+    } else {
+        calendar.style.display = 'none';
+    }
+});
+
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const rootElement = document.documentElement;
+        const gameContainer = document.querySelector('.game-container');
+        const linksContainer = document.querySelector('.container');
+        const message = document.querySelector('.message');
+        const choices = document.querySelectorAll('.choice');
+
+        const outcomes = {
+            rock: "scissors",
+            scissors: "paper",
+            paper: "rock"
+        };
+
+        toggleBtn.addEventListener('click', () => {
+            const currentTheme = rootElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                rootElement.removeAttribute('data-theme');
+                toggleBtn.textContent = '☀️';
+            } else {
+                rootElement.setAttribute('data-theme', 'dark');
+                toggleBtn.textContent = '🌙';
+            }
+        });
+
+        function playGame(playerChoice) {
+            const computerChoice = Object.keys(outcomes)[Math.floor(Math.random() * 3)];
+            if (playerChoice === computerChoice) {
+                message.textContent = "비겼습니다! 다시 선택하세요.";
+            } else if (outcomes[playerChoice] === computerChoice) {
+                message.textContent = "이겼습니다! 즐겨찾기로 이동합니다.";
+                setTimeout(() => {
+                    gameContainer.style.display = "none";
+                    message.style.display = "none";
+                    linksContainer.style.display = "grid";
+                }, 1000);
+            } else {
+                message.textContent = "졌습니다! 창을 닫습니다.";
+                setTimeout(() => {
+                    window.close();
+                }, 1000);
+            }
+        }
+
+        choices.forEach(choice => {
+            choice.addEventListener('click', () => {
+                playGame(choice.dataset.choice);
+            });
+        });
+
+        addButton.addEventListener("click", () => {
+            modal.style.display = "block";
+            overlay.style.display = "block";
+        });
+
+        cancelBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+            overlay.style.display = "none";
+        });
+
+        addBtn.addEventListener("click", () => {
+            const name = nameInput.value.trim();
+            const url = urlInput.value.trim();
+            if (name && url) {
+                const newBox = document.createElement("a");
+                newBox.className = "box";
+                newBox.textContent = name;
+                newBox.href = url;
+                newBox.target = "_blank";
+                container.insertBefore(newBox, addButton);
+                nameInput.value = "";
+                urlInput.value = "";
+                modal.style.display = "none";
+                overlay.style.display = "none";
+            } else {
+                alert("모든 필드를 입력해주세요!");
+            }
+        });
+        
+
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.textContent = '❄';
+
+            const size = Math.random() * 10 + 10;
+            const duration = Math.random() * 5 + 3;
+            const position = Math.random() * window.innerWidth;
+
+            snowflake.style.left = `${position}px`;
+            snowflake.style.fontSize = `${size}px`;
+            snowflake.style.animationDuration = `${duration}s`;
+            snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+
+            document.body.appendChild(snowflake);
+
+            setTimeout(() => {
+                snowflake.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(createSnowflake, 100);
+
+        
+    </script>
 </body>
 </html>
