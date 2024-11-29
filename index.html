@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Menu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #7C2025;
+      color: white;
+    }
+
+    .quick-menu {
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .menu-categories {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .category {
+      padding: 10px 15px;
+      border: 1px solid white;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+
+    .category.inactive {
+      opacity: 0.5;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 20px auto;
+      max-width: 400px;
+    }
+
+    .menu-grid a {
+      text-decoration: none;
+    }
+
+    .menu-grid button {
+      width: 180px; /* 고정된 너비 */
+      height: 60px; /* 고정된 높이 */
+      padding: 10px;
+      background-color: white;
+      color: #7C2025;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: transform 0.2s, background-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu-grid button:hover {
+      background-color: #FFD1D1;
+      transform: scale(1.05);
+    }
+
+    .expand-button {
+      margin-top: 20px;
+      background-color: transparent;
+      color: white;
+      font-size: 16px;
+      border: 1px solid white;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .expand-button:hover {
+      background-color: white;
+      color: #7C2025;
+    }
+  </style>
+</head>
+<body>
+  <div class="quick-menu">
+    <h1>Quick menu</h1>
+    <div class="menu-categories">
+      <div class="category">자주 찾는 메뉴</div>
+      <div class="category inactive">예비 교통대인</div>
+      <div class="category inactive">교통대인</div>
+      <div class="category inactive">교직원</div>
+    </div>
+    <div class="menu-grid">
+      <a href="https://example.com/system"><button>통합정보시스템</button></a>
+      <a href="https://example.com/library"><button>도서관</button></a>
+      <a href="https://example.com/management"><button>학생역량통합관리시스템</button></a>
+      <a href="https://example.com/education"><button>대학교육혁신원</button></a>
+      <a href="https://example.com/global"><button>글로벌대학30</button></a>
+      <a href="https://example.com/portal"><button>포털시스템</button></a>
+      <a href="https://example.com/lifelong"><button>평생교육원</button></a>
+      <a href="https://example.com/fund"><button>발전기금</button></a>
+      <a href="https://example.com/international"><button>국제교류본부</button></a>
+      <a href="https://example.com/idf"><button>IDF</button></a>
+      <a href="https://example.com/project"><button>국립대학육성사업</button></a>
+      <a href="https://example.com/admission"><button>입학정보</button></a>
+      <a href="https://example.com/dormitory"><button>생활관</button></a>
+      <a href="https://example.com/certificate"><button>증명서발급</button></a>
+      <a href="https://example.com/department"><button>학부안내</button></a>
+      <a href="https://example.com/smartcampus"><button>스마트캠퍼스</button></a>
+      <a href="https://example.com/studentcard"><button>모바일 학생증</button></a>
+      <a href="https://example.com/counseling"><button>학생상담센터</button></a>
+      <a href="https://example.com/internship"><button>현장실습지원센터/IPP사업단</button></a>
+      <a href="https://example.com/ambassador"><button>KNUT 홍보대사</button></a>
+    </div>
+    <button class="expand-button">전체 펼쳐보기 ↓</button>
+  </div>
+  <script>
+    document.querySelector('.expand-button').addEventListener('click', () => {
+      alert('전체 메뉴를 불러옵니다!');
+    });
+  </script>
+</body>
+</html>
